@@ -36,14 +36,14 @@ $("#goBtn").click(function(event) {
 	for (var i=0;i<paramsRaw.length;i++) {
 		paramsRaw[i] = parseFloat(paramsRaw[i].replace(",", "."));
 		if (isNaN(paramsRaw[i]) === true) {
-			$("#myModalLabel").text("Invalid args");
+			$("#myModalLabel").text("Неверные аргументы");
 			$("#input").addClass('bg-danger');
 			return;
 		}
 	}
 
 	if (paramsRaw.length < 4) {
-		$("#myModalLabel").text("Need at least 4 args");
+		$("#myModalLabel").text("Нужно больше 3 аргументов");
 		$("#input").addClass('bg-danger');
 		return;
 	}
