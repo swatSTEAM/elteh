@@ -31,8 +31,8 @@ $("#goBtn").click(function(event) {
 		keyboard: true
   	});
 	//Парсим строку в массив float
-	var paramsRaw = $("#input").val().split(/\n| /);
-
+	var paramsRaw = $("#input").val().split(/\n|\s/).filter(Boolean);
+	console.log(paramsRaw);
 	for (var i=0;i<paramsRaw.length;i++) {
 		paramsRaw[i] = parseFloat(paramsRaw[i].replace(",", "."));
 		if (isNaN(paramsRaw[i]) === true) {
