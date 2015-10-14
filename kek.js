@@ -67,7 +67,7 @@ $("#goBtn").click(function(event) {
 	toTable(paramsDick, $('#varser'));
 	$('#varser').prepend(
 		$('<li>').attr('class','list-group-item active').append(
-			'Вар. ряд ('+paramsDick.length + ')'
+			'Вариац. ряд'
 		)
 	);
 
