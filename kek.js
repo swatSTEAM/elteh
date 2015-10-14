@@ -142,7 +142,7 @@ function dickToUI(errors, dickCoeffs, paramsDick, paramsRaw, criticalCoeffs) {
 				)
 			);
 		} else {
-			for (var j=0; j<errors[j].length; j++) {
+			for (var j=0; j<errors[i].length; j++) {
 				if (i<2) {
 					$('#varser').children().eq(
 						$.inArray(errors[i][j], paramsDick)+1
@@ -192,13 +192,16 @@ function parseDicson(paramsDick, paramsRaw) {
 	];
 
 	var criticalCoeffs = [];
-	for (var i = critical.length-1;i>=0;i--) {
-		if (count >= critical[i][0]) {
+	var min = Infinity;
+	for (var i=0; i<critical.length; i++) {
+		var div = Math.abs(count - critical[i][0]);
+		if (div <= min) {
+			min = div;
 			criticalCoeffs = critical[i][1];
-			generalToUI(paramsRaw, criticalCoeffs);
-			break;
 		}
 	}
+	console.log(criticalCoeffs);
+	generalToUI(paramsRaw, criticalCoeffs);
 
 	var dickCoeffs = [0,0];
 	console.log(paramsDick);
@@ -206,7 +209,7 @@ function parseDicson(paramsDick, paramsRaw) {
 		var coeff = (paramsDick[i]-paramsDick[i-1])/(paramsDick[i]-paramsDick[0]);
 		dickCoeffs.push(coeff);
 		for (var p=0; p<criticalCoeffs.length; p++) {
-			if (coeff>criticalCoeffs[p]) {
+			if (coeff.toFixed(2)>criticalCoeffs[p].toFixed(2)) {
 				errors[p].push(paramsDick[i]);
 			}
 		}
