@@ -17,6 +17,15 @@ $("#load2").click(function(event) {
 });
 
 $("#goBtn").click(function(event) {
+
+	function sortFunction(a, b){
+	  if(a<b)
+	     return -1 // Или любое число, меньшее нуля
+	  if(a>b)
+	     return 1  // Или любое число, большее нуля
+	  return 0
+	}
+
 	$('#myModal').modal({
 		backdrop: '',
 		keyboard: true
@@ -54,7 +63,7 @@ $("#goBtn").click(function(event) {
 	$.each(paramsRaw, function(i, el){
 	    if($.inArray(el, paramsDick) === -1) paramsDick.push(el);
 	});
-	paramsDick = paramsDick.sort();
+	paramsDick = paramsDick.sort(sortFunction);
 	toTable(paramsDick, $('#varser'));
 	$('#varser').prepend(
 		$('<li>').attr('class','list-group-item active').append(
@@ -62,7 +71,7 @@ $("#goBtn").click(function(event) {
 		)
 	);
 
-	parseDicson(paramsDick, paramsRaw.length);
+	parseDicson(paramsDick, paramsRaw);
 
 	$('#cont').css('display','block');
 });
@@ -71,29 +80,99 @@ function toTable(params, table) {
 	table.empty();
 	for (var i=0; i<params.length; i++) {
 		table.append(
-		    $('<li>').attr('class','list-group-item').append(params[i])
+		    $('<a>').attr('href','#').attr(
+				'data-toggle','popover'
+			).popover(
+				{placement:'right'}
+			).addClass('list-group-item').append(params[i])
 		);
 	}
 }
 
 function generalToUI(params, coeffs) {
-	console.log(coeffs);
+	var levels = [
+			 0.10, 0.05, 0.02, 0.01
+	];
+	var total = 0;
+
+	$.each(params,function() {
+	    total += this;
+	});
+
+	var avAr = total/params.length;
+	total = 0;
+	$.each(params,function() {
+	    total += Math.pow((this-avAr),2);
+	});
+	var avSq = Math.sqrt(total/params.length);
+	$('#genParams').append(
+		$('<p>').attr('class','list-group-item-text').append(
+			'Ср. арифметическое: ' + avAr.toFixed(2)
+		)
+	).append(
+		$('<p>').attr('class','list-group-item-text').append(
+			'Ср. квадр. откл.: ' + avSq.toFixed(2)
+		)
+	);
+	for (var i=0; i<coeffs.length; i++) {
+		$('#genParams').append(
+			$('<p>').attr('class','list-group-item-text').append(
+				'Z('+levels[i]+'): ' + coeffs[i]
+			)
+		);
+	};
 }
 
-function dickToUI(errors, dickCoeffs) {
-	for (var i in errors) {
-		for (var j in errors[i]) {
-			$('#q'+i).append(
+function dickToUI(errors, dickCoeffs, paramsDick, paramsRaw, criticalCoeffs) {
+	console.log(dickCoeffs);
+	for (var i=0; i<dickCoeffs.length; i++) {
+		$('#varser').children().eq(
+			i+1
+		).addClass(
+			'list-group-item-success'
+		).attr(
+			'data-content', dickCoeffs[i].toFixed(2)
+		);
+	}
+	for (var i=0; i<errors.length; i++) {
+		if (errors[i].length == 0) {
+			$('#q'+i).addClass('list-group-item-success').append(
 				$('<p>').attr('class','list-group-item-text').append(
-					errors[i][j]
+					'Нет промахов по данной значимости'
 				)
 			);
+		} else {
+			for (var j=0; j<errors[j].length; j++) {
+				if (i<2) {
+					$('#varser').children().eq(
+						$.inArray(errors[i][j], paramsDick)+1
+					).addClass(
+						'list-group-item-warning'
+					);
+					$('#q'+i).addClass('list-group-item-warning');
+				} else {
+					$('#varser').children().eq(
+						$.inArray(errors[i][j], paramsDick)+1
+					).addClass(
+						'list-group-item-danger'
+					);
+					$('#q'+i).addClass('list-group-item-danger');
+				}
+				$('#q'+i).append(
+					$('<p>').attr('class','list-group-item-text').append(
+						errors[i][j] + ' (' +
+						dickCoeffs[$.inArray(errors[i][j], paramsDick)].toFixed(2)
+						+ ' > ' + criticalCoeffs[i] + ')'
+					)
+				);
+			}
 		}
 	}
 }
 
-function parseDicson(params, count) {
+function parseDicson(paramsDick, paramsRaw) {
 	var errors = [[],[],[],[]];
+	var count = paramsRaw.length;
 	//Таблица критических критериев
 	//уровни значимости 0.1 0.05 0.02 0.01
 	var levels = [
@@ -116,21 +195,21 @@ function parseDicson(params, count) {
 	for (var i = critical.length-1;i>=0;i--) {
 		if (count >= critical[i][0]) {
 			criticalCoeffs = critical[i][1];
-			generalToUI(params, criticalCoeffs);
+			generalToUI(paramsRaw, criticalCoeffs);
 			break;
 		}
 	}
 
 	var dickCoeffs = [0,0];
-	console.log(params);
-	for (var i=2; i<params.length; i++) {
-		var coeff = (params[i]-params[i-1])/(params[i]-params[0]);
+	console.log(paramsDick);
+	for (var i=2; i<paramsDick.length; i++) {
+		var coeff = (paramsDick[i]-paramsDick[i-1])/(paramsDick[i]-paramsDick[0]);
 		dickCoeffs.push(coeff);
 		for (var p=0; p<criticalCoeffs.length; p++) {
 			if (coeff>criticalCoeffs[p]) {
-				errors[p].push(params[i]);
+				errors[p].push(paramsDick[i]);
 			}
 		}
 	}
-	dickToUI(errors, dickCoeffs);
+	dickToUI(errors, dickCoeffs, paramsDick, paramsRaw, criticalCoeffs);
 };
