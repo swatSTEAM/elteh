@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+
+    <head>
+        <title>Elteh</title>
+        <meta charset='utf-8' />
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="styles.css" />
+    </head>
+    <body>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                     <h4 class="modal-title" id="myModalLabel">Enter data</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea id="input"name="name" rows="15"></textarea>
+                    <div class="text-center">
+                        <div id="btns" class="btn-group">
+                            <button id="goBtn" class="btn btn-primary">Go</button>
+                            <button id="load1" class="btn btn-primary">Load 1</button>
+                            <button id="load2" class="btn btn-primary">Load 2</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="cont">
+        <div class="row">
+            <div class="col-md-2 col-xs-2">
+              <ul class="list-group" id="samples">
+                <li class="list-group-item active">Выборка</li>
+              </ul>
+            </div>
+            <div class="col-md-2 col-xs-2">
+              <ul class="list-group" id="varser">
+                <li class="list-group-item active">Вар. ряд</li>
+              </ul>
+            </div>
+            <div class="col-md-8 col-xs-8">
+                <ul class="list-group" id="main">
+                  <li class="list-group-item active">Информация</li>
+                  <li class="list-group-item">
+                      <h4 class="list-group-item-heading">Параметры выборки</h4>
+                      <p class="list-group-item-text" id="genParams">...</p>
+                  </li>
+                  <li class="list-group-item">
+                      <h4 class="list-group-item-heading"></h4>
+                      <p class="list-group-item-text" id="errorsOut">
+                          <ul class="list-group" id="main">
+                              <li class="list-group-item">
+                                  <!-- <p class="list-group-item-text">...</p> -->
+                                  <h4 class="list-group-item-heading">Промахи по Диксону (q - значимость)</h4>
+                              </li>
+                              <li class="list-group-item" id="q0">
+                                  <h4 class="list-group-item-heading">q = 0.1</h4>
+                              </li>
+                              <li class="list-group-item" id="q1">
+                                  <h4 class="list-group-item-heading">q = 0.05</h4>
+                              </li>
+                              <li class="list-group-item" id="q2">
+                                  <h4 class="list-group-item-heading">q = 0.02</h4>
+                              </li>
+                              <li class="list-group-item" id="q3">
+                                  <h4 class="list-group-item-heading">q = 0.01</h4>
+                              </li>
+                          </ul>
+                      </p>
+                  </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="jq.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="kek.js"></script>
+    </body>
+
+</html>

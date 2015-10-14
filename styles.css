@@ -1,0 +1,18 @@
+#input {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+#btns {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#cont {
+    display: none;
+    margin-top: 100px;
+}
