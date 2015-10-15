@@ -20,9 +20,9 @@ $("#goBtn").click(function(event) {
 
 	function sortFunction(a, b){
 	  if(a<b)
-	     return -1 // Или любое число, меньшее нуля
+	     return -1
 	  if(a>b)
-	     return 1  // Или любое число, большее нуля
+	     return 1
 	  return 0
 	}
 
@@ -30,7 +30,7 @@ $("#goBtn").click(function(event) {
 		backdrop: '',
 		keyboard: true
   	});
-	//Парсим строку в массив float
+
 	var paramsRaw = $("#input").val().split(/\n|\s/).filter(Boolean);
 	console.log(paramsRaw);
 	for (var i=0;i<paramsRaw.length;i++) {
@@ -48,7 +48,6 @@ $("#goBtn").click(function(event) {
 		return;
 	}
 
-	//Записываем в UI
 	$("#myModal").modal('hide');
 	var samples = $('#samples');
 
@@ -173,8 +172,6 @@ function dickToUI(errors, dickCoeffs, paramsDick, paramsRaw, criticalCoeffs) {
 function parseDicson(paramsDick, paramsRaw) {
 	var errors = [[],[],[],[]];
 	var count = paramsRaw.length;
-	//Таблица критических критериев
-	//уровни значимости 0.1 0.05 0.02 0.01
 	var levels = [
 			 0.10, 0.05, 0.02, 0.01
 	];
