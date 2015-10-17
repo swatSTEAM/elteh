@@ -124,15 +124,6 @@ function generalToUI(params, coeffs) {
 
 function dickToUI(errors, dickCoeffs, paramsDick, paramsRaw, criticalCoeffs) {
 	console.log(dickCoeffs);
-	for (var i=0; i<dickCoeffs.length; i++) {
-		$('#varser').children().eq(
-			i+1
-		).addClass(
-			'list-group-item-success'
-		).attr(
-			'data-content', dickCoeffs[i].toFixed(2)
-		);
-	}
 	for (var i=0; i<errors.length; i++) {
 		if (errors[i].length == 0) {
 			$('#q'+i).addClass('list-group-item-success').append(
@@ -142,25 +133,27 @@ function dickToUI(errors, dickCoeffs, paramsDick, paramsRaw, criticalCoeffs) {
 			);
 		} else {
 			for (var j=0; j<errors[i].length; j++) {
+				var clss;
 				if (i<2) {
-					$('#varser').children().eq(
-						$.inArray(errors[i][j], paramsDick)+1
-					).addClass(
-						'list-group-item-warning'
-					);
-					$('#q'+i).addClass('list-group-item-warning');
+					clss = 'list-group-item-warning';
 				} else {
-					$('#varser').children().eq(
-						$.inArray(errors[i][j], paramsDick)+1
-					).addClass(
-						'list-group-item-danger'
-					);
-					$('#q'+i).addClass('list-group-item-danger');
+					clss = 'list-group-item-danger';
 				}
+				$('#varser').children().eq(
+					$.inArray(errors[i][j], paramsDick)+1
+				).addClass(
+					clss
+				);
+				$('#samples').children().eq(
+					$.inArray(errors[i][j], paramsRaw)+1
+				).addClass(
+					clss
+				);
+				$('#q'+i).addClass(clss);
 				$('#q'+i).append(
 					$('<p>').attr('class','list-group-item-text').append(
 						errors[i][j] + ' (' +
-						dickCoeffs[$.inArray(errors[i][j], paramsDick)].toFixed(2)
+						dickCoeffs[0].toFixed(2)
 						+ ' > ' + criticalCoeffs[i] + ')'
 					)
 				);
@@ -200,9 +193,10 @@ function parseDicson(paramsDick, paramsRaw) {
 	console.log(criticalCoeffs);
 	generalToUI(paramsRaw, criticalCoeffs);
 
-	var dickCoeffs = [0,0];
+	var dickCoeffs = [];
 	console.log(paramsDick);
-	for (var i=2; i<paramsDick.length; i++) {
+	var i = paramsDick.length - 1;
+	// for (var i=2; i<paramsDick.length; i++) {
 		var coeff = (paramsDick[i]-paramsDick[i-1])/(paramsDick[i]-paramsDick[0]);
 		dickCoeffs.push(coeff);
 		for (var p=0; p<criticalCoeffs.length; p++) {
@@ -210,6 +204,6 @@ function parseDicson(paramsDick, paramsRaw) {
 				errors[p].push(paramsDick[i]);
 			}
 		}
-	}
+	// }
 	dickToUI(errors, dickCoeffs, paramsDick, paramsRaw, criticalCoeffs);
 };
